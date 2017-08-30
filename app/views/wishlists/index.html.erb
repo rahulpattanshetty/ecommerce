@@ -1,0 +1,24 @@
+<h2>Wishlist</h2>
+<table border="1">
+	<thead>
+		<tr>
+			<th>sl. no</th>
+			<th>Name</th>
+			<th>Price</th>
+			<th>Action</th>
+
+		</tr>
+	</thead>
+	<tbody>
+		<%@wishlist.each_with_index do |item,index|%>
+		<tr>
+			<td><%=index+1%></td>
+			<td><%=item.product.name%></td>
+			<td><%=item.product.price%></td>
+			<td><%=link_to "Remove",wishlist_path(item.id), method: :delete, data:{confirm:"Are you sure?"}%></td>
+		</tr>
+
+		<%end%>
+	</tbody>
+
+</table>

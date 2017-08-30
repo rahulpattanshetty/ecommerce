@@ -1,0 +1,69 @@
+<h2>Product details</h2>
+<p>
+Code:<%=@product.code%><br>
+Product:<%= @product.name %><br>
+INR <%=@product.price %><br>
+Description:<%=@product.description%><br>
+Category:<%=link_to @product.category.name,category_path(@product.category_id)%><br>
+Stock:<%=@product.stock%><br>
+Availablity:<%=@product.cod_eligible%> <br>
+
+<%= form_for @cart_line_item do |f|%>
+
+	<%=f.label :quantity%>
+	<%=f.select :quantity, (1..10).to_a%>
+	<%=f.hidden_field :product_id, value:@product.id%><br>
+
+	<%=f.submit "Add to cart"%>
+<%end%>
+
+<%if user_signed_in? && current_user.is_admin%>
+	<% @reviews.each do |review|%>
+	<ul>
+		<li><%=review.body%>(<%=review.rating%>)
+		<%=link_to "delete", review_path(review.id), method: :delete, data:{confirm:"Are you sure?"}%>
+		<%=link_to "edit", edit_review_path(review.id)%>
+
+		</li>
+	</ul>
+	<%end%>
+<%else%>
+<h3>Listings of reviews</h3>
+	<%@reviews.each do |review|%>
+	<ul>
+		<li><%=review.body%>(<%=review.rating%>)
+
+		<%if user_signed_in? && review.product_id == @product.id%>
+		<%=link_to "edit",edit_review_path(review.id)%>
+		<%=link_to "delete",review_path(review.id), method: :delete, data:{confirm:"Are you sure?"}%>
+		<%end%>
+		</li>
+	</ul>
+	<%end%>
+<%end%>
+
+
+
+
+
+<%if user_signed_in? %>
+	
+			<%= form_for @review do |f|%>
+
+			Review: 
+			<%=f.text_area :body%>
+			<%=f.hidden_field :product_id, value:@product.id%><br>
+			Ratings:
+			<%=f.number_field :rating , min:1, max:5%><br>
+
+			<%=f.submit "Add review"%>
+			<%end%>
+		
+<%end%>
+</p>
+
+
+<%if user_signed_in? && current_user.is_admin%>
+<%= link_to "Edit",edit_product_path(@product.id)%>
+<%= link_to "destroy", product_path(@product.id) , method: :delete, data:{confirm:"Are you sure?"}%>
+<%end%>

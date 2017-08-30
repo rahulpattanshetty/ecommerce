@@ -1,0 +1,52 @@
+
+<h1>Welcome to our website</h1>
+
+<!--
+<%= %> is embedded ruby tag inside HTML used for presentation
+<% %> is embedded ruby tag inside HTMl used for evaluation
+-->
+2+2:<%= 2+2 %>
+<% names=["ramesh","suresh","veeresh","ganesh"] %>
+
+<ul> <!--unordered list-->
+	<li>virat</li>
+	<li>sachin</li>
+	<li>dhoni</li>
+</ul>
+<ol><!--Ordered list-->
+	<li>Samsung</li>
+	<li>Moto</li>
+</ol>
+
+<h3>Listing Names</h3>
+<ol>
+
+<% names.each do |name| %>
+	<li><%=name.upcase %></li>
+<%end %>
+</ol>
+
+<% companies = [] %>
+<% if companies.empty? %>
+	<h4>Company not found</h4>
+<% else %>
+	<h4>listing of Companies</h4>
+	<ol>
+		<% companies.each do |company| %>
+			<li><%= company %></li>
+		<% end %>
+	</ol>
+<% end %>
+<%= link_to "Categories",categories_path%>
+<a href="/home/about">About</a>
+<%= link_to "ABOUT (ror)",home_about_path %>
+<%= link_to "ContactUs",home_contactUs_path %>
+
+
+<h3>Listing of Categories</h3>
+<ol>
+	<% @categories.each do |category|%>
+		<li><%=category.name %></li>
+	<% end %>
+
+</ol>

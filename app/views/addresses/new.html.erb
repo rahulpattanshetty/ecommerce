@@ -1,0 +1,11 @@
+<%= form_for @address do |f| %>
+
+	Name:<%=f.text_field :name%><br>
+	Street Address:<%=f.text_field :street_address%><br>
+	City:<%=f.text_field :city%><br>
+	Pincode:<%=f.number_field :pin_code%><br>
+	Landmark:<%=f.text_field :landmark%><br>
+	<%=f.submit%>
+	
+
+<%end%>

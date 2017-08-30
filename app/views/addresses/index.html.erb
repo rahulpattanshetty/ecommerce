@@ -1,0 +1,36 @@
+<h2>Select address</h2>
+
+<table border="1">
+	<thead>
+		<tr>
+			<th>#</th>
+			<th>Name</th>
+			<th>Street_address</th>
+			<th>City</th>
+			<th>Pincode</th>
+		</tr>
+	</thead>
+	<tbody>
+		<%@addresses.each_with_index do |address,index|%>
+		<tr>
+			<td><%=index + 1%></td>
+			<td><%=address.name%></td>
+			<td><%=address.street_address%></td>
+			<td><%=address.city%></td>
+			<td><%=address.pin_code%></td>
+			<td>
+			
+			<%=form_for address do |f|%>
+				<%=f.submit "select"%>
+													
+				<%end%> 
+			</td>
+		</tr>
+		<%end%>
+	</tbody>
+</table>
+
+<br>
+
+<%=link_to "Add new address",new_address_path%>
+
