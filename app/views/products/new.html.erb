@@ -25,6 +25,11 @@
 
 	<%=f.label :category_id%><br>
 	<%= f.collection_select :category_id , Category.all, :id, :name, prompt: "select category" %><br>
+	<span id="productCount"></span><br>
+
+	<%=f.label :sub_category_id%><br>
+	<%= f.collection_select :sub_category_id ,[], :id, :name, prompt: "select sub category" %><br>
+	
 
 	<%=f.label :stock%><br>
 	<%=f.number_field :stock %><br>
@@ -38,7 +43,38 @@
 <% end %>
 
 <script>
-	var nameHandle = document.getElementById('product_name');
+var categoryHandle = document.getElementById('product_category_id');
+var subCategoryHandle = document.getElementById('product_sub_category_id');
+categoryHandle.addEventListener('change', function(){
+	subCategoryHandle.innerHTML = "";
+	if (categoryHandle.value != "") {
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET','/ajax_calls/find_sub_categories?category_id='+categoryHandle.value,true);
+	xhr.onreadystatechange = function(){
+		if (xhr.readyState === 4 && xhr.status === 200) {
+			var subCategories = JSON.parse(xhr.responseText);
+			subCategories.forEach(function(subCategory){
+				
+				var newElement = document.createElement('option');//<option></option>
+				
+				var newText = document.createTextNode(subCategory.name);//TV
+				newElement.appendChild(newText);//<option>TV</option>
+				newElement.setAttribute("value", subCategory.id)
+				//<option value="1">TV</option>
+				subCategoryHandle.appendChild(newElement);
+				//console.log(subCategoryHandle)
+			});
+
+		}
+	}
+	xhr.send();
+}else{
+	document.getElementById('productCount').innerHTML=""
+}
+},false);
+
+
+	/*var nameHandle = document.getElementById('product_name');
 	var nameErrorHandle = document.getElementById('nameError');
 	nameHandle.onblur = function(){
 		if (nameHandle.value == "")
@@ -47,6 +83,8 @@
 		}else{
 		nameErrorHandle.innerHTML="";
 	}
-	};
+	}; 
+*/
+
 
 </script>

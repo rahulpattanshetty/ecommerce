@@ -1,0 +1,10 @@
+<%if @vendor.errors.any?%>
+	$('#errors').show();
+	$('#errors').html("<%= escape_javascript render 'errors'%>");//errors is an id of index page
+<%else%>
+	$('#vendorTable').html("<%=escape_javascript render 'table'%>");
+	$('#new_vendor')[0].reset();
+	$('#notice').text("Vendor added successfully");
+	$('#count').text("<%= @vendors.count%>");
+	$('#errors').hide();//to make errors hide in index page
+<%end%>

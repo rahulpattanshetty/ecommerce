@@ -5,6 +5,25 @@ before_action :check_is_admin, except: [:index, :show]
 
 def index
 	@products = Product.all
+	@categories = Category.all
+	if params[:ids]
+		@products = Product.where(category_id:params[:ids].split(","))
+		if @products.empty?
+			@products = Product.all
+			render json: @products.map{|p| p.attributes.merge({category_name: p.category.name})}
+		else
+			render json: @products.map{|p| p.attributes.merge({category_name: p.category.name})}
+		end
+	end
+	if params[:cat_ids]
+		@products = Product.where(category_id:params[:cat_ids].split(","))
+		if @products.empty?
+			 @products = Product.all
+		else
+			@products
+		end
+	end
+	#binding.pry
 end
 
 def new 

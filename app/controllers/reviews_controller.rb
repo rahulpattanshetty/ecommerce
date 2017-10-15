@@ -1,5 +1,6 @@
 class ReviewsController < ApplicationController
 before_action :authenticate_user!
+before_action :set_params, only:[:show,:edit,:destroy]
 def index
 	@reviews=Review.all
 end
@@ -9,7 +10,7 @@ end
 
 def create
 
-	@review = Review.new(params[:review].permit(:product_id, :body, :rating))
+	@review = Review.new(review_params)
 	@review.user_id=current_user.id
 	if @review.save
 		Notification.review_greetings(@review).deliver!
@@ -18,25 +19,32 @@ def create
 	
 end
 def show
-	@review = Review.find(params[:id])
+	
 	#@product =Product.find(params[:id])
 end
 def edit
-	@review = Review.find(params[:id])
+	
 	
 end
 def update
 	@review = Review.find(params[:id])
 	
-	if @review.update_attributes(params[:review].permit(:body, :rating))
+	if @review.update_attributes(review_params)
 		redirect_to products_path, notice:"Review updated"
 	end
 	
 end
 def destroy
-	@review =Review.find(params[:id])
 	@review.destroy
-
 	redirect_to products_path , notice:"successfully deletedS"
 end
+private
+	def review_params
+		params[:review].permit(:product_id, :body, :rating)
+		
+	end
+	def set_params
+		@review =Review.find(params[:id])
+	end
+
 end

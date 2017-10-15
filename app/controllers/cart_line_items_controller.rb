@@ -1,4 +1,5 @@
 class CartLineItemsController < ApplicationController
+	before_action :authenticate_user!
 	def index
 	 @cart_line_items=CartLineItem.where('user_id=?',current_user.id)	
 	 	@wishlist=Wishlist.new

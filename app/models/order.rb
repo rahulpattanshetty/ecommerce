@@ -7,6 +7,7 @@ validates_presence_of :user_id, :order_number, :order_date
 # callbacks # argument (method call)
 after_create :copy_cart_line_items_to_order_line_items
 after_create :empty_cart_line_items
+after_create :calculate_total
 
 def copy_cart_line_items_to_order_line_items
 	user = self.user
@@ -26,5 +27,8 @@ def empty_cart_line_items
 	CartLineItem.delete(user.cart_line_items.pluck(:id))
 
 end
+def calculate_total
+		self.update_attributes(total: self.order_line_items.sum(:total))
+	end
 
 end
