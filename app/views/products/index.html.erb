@@ -3,7 +3,15 @@
 	<input type="checkbox" value="<%=category.id%>" id="<%=category.id%>" name ="<%=category.name%> "onchange="myFunction(<%=category.id%>)"/> <%=category.name %>
 <%end%>
 </div>
-
+<%=form_tag(products_path,method: 'get') do %>
+	<%=text_field_tag :search%>
+	<%=submit_tag "search"%>
+<%end%>
+<div id="slidecontainer" align="right">
+ Sort: <input type="range" min="1" max="100" value="" class="slider" id="myRange">
+ min:<input type="number" id="min" >
+ max:<input type="number" id="max" >
+</div>
 <h2>Listing Products</h2>
 
 <%#=form_tag(products_path,method: 'get') do%>
@@ -45,9 +53,45 @@
 	var values=[];
 	var tableHandle = document.getElementById('myTable')
 	var bodyHandle =document.getElementById('myBody')
-	var category_name;
+	var silderHandle =document.getElementById('myRange')
+
+	myRange.oninput = function(){
+		
+		var xhr = new XMLHttpRequest();
+		xhr.open('GET','http://localhost:3000/products?sort='+this.value,true)
+		console.log(this.value)
+		xhr.onreadystatechange =function(){
+			if (xhr.readyState === 4 && xhr.status === 200) {
+				var products = JSON.parse(xhr.responseText);
+				emptyBody();
+				
+				products.forEach(function(product){
+				var row = tableHandle.insertRow(-1);
+				var link = document.createElement("a");
+				link.setAttribute('href','http://localhost:3000/products/'+product.id)
+				//row.setAttribute('cat_name',"tr_"+product.category_id);
+				
+				var cell1 = row.insertCell(0);
+				var cell2 = row.insertCell(1);
+				var cell3 = row.insertCell(2);
+				cell1.setAttribute('href','http://localhost:3000/products/'+product.id)
+				console.log(cell1)
+				
+
+				cell1.innerHTML = product.name
+				cell2.innerHTML = product.price
+				cell3.innerHTML = product.category_name
+				
+				bodyHandle.appendChild(row)	
+				});
+			}
+		}
+		xhr.send();
+	};
+
+
 	function myFunction(ids) {
-		category_name=document.getElementById(ids).name	
+			
 		if (document.getElementById(ids).checked) {
 			if (!values.includes(ids)) 
 			{
@@ -83,13 +127,14 @@
 				link.setAttribute('href','http://localhost:3000/products/'+product.id)
 				//row.setAttribute('cat_name',"tr_"+product.category_id);
 				
-				
 				var cell1 = row.insertCell(0);
 				var cell2 = row.insertCell(1);
 				var cell3 = row.insertCell(2);
-					
+				cell1.setAttribute('href','http://localhost:3000/products/'+product.id)
+				console.log(cell1)
+				
 
-				cell1.innerHTML =  product.name
+				cell1.innerHTML = product.name
 				cell2.innerHTML = product.price
 				cell3.innerHTML = product.category_name
 				

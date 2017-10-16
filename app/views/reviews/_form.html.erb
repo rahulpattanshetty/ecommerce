@@ -1,0 +1,13 @@
+<%= form_for(@review, remote: true) do |f|%>
+	<% if @review.errors.any? %>
+      <%= render 'errors'%>
+  <% end %>
+
+			Review: 
+			<%=f.text_area :body%>
+			<%=f.hidden_field :product_id, value:@product.id%><br>
+			Ratings:
+			<%=f.number_field :rating , min:1, max:5%><br>
+
+			<%=f.submit "Add review"%>
+<%end%>

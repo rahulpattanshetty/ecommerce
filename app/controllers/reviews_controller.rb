@@ -11,10 +11,18 @@ end
 def create
 
 	@review = Review.new(review_params)
-	@review.user_id=current_user.id
-	if @review.save
-		Notification.review_greetings(@review).deliver!
-		redirect_to products_path, notice: "review added"
+	@review.user_id = current_user.id
+	respond_to do |format|
+		#binding.pry
+		if @review.save
+			#Notification.review_greetings(@review).deliver!
+			#redirect_to products_path, notice: "review added"
+			format.js
+		else
+			#binding.pry
+
+			format.js
+		end
 	end
 	
 end
@@ -36,7 +44,10 @@ def update
 end
 def destroy
 	@review.destroy
-	redirect_to products_path , notice:"successfully deletedS"
+	#redirect_to products_path , notice:"successfully deleted"
+	respond_to do |format|
+	format.js
+end
 end
 private
 	def review_params
