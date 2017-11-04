@@ -5,28 +5,97 @@
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag "https://www.gstatic.com/charts/loader.js" %>
 
-
-
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+ <script src="../jquery-ui.js"></script>
+  <link rel="stylesheet" href="../jquery-ui.css">
+    <script src="../chosen.jquery.js"></script>
+  <link rel="stylesheet" href="../chosen.css">
+  <!-- Bootstrap Core CSS -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="../css/shop-homepage.css" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
+
+   <link rel="stylesheet" href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+    <script type="text/javascript" src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+
   <%= csrf_meta_tags %>
 </head>
 <body>
-<%=link_to "Products", products_path%> |
-<%=link_to "categories", categories_path%> |
-<%if user_signed_in?%>
-	<%=current_user.email%> |
-	<%=link_to "cart",cart_line_items_path%> |
-	<%=link_to "orders", orders_path%> |
-	<%=link_to "Account setting",edit_user_registration_path%> |
-	<%=link_to "Logout",destroy_user_session_path, method: :delete%>
-	<%else%>
-	<%=link_to "login",new_user_session_path%>|
-	<%=link_to "Register",new_user_registration_path%>
-	
-	<%end%>
-<p class="notice"><%= notice %></p>
-<p class="alert"><%= alert %></p>
-<%= yield %>
+
+
+	<div class="container">
+	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/products">E-Commerce</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    
+                        <%if user_signed_in?%>
+                        <li><%=link_to current_user.username.capitalize%></li>
+                        <li><%=link_to "cart",cart_line_items_path%></li> 
+                        <li><%=link_to "orders", orders_path%> </li>
+                        <li><%=link_to "wishlist", wishlists_path%> </li>
+                        <li><%=link_to "Account setting",edit_user_registration_path%> </li>
+                        <li><%=link_to "Logout",destroy_user_session_path, method: :delete%></li>
+                        <%else%>
+                        <li><%=link_to "login",new_user_session_path%></li>
+                        <li><%=link_to "Register",new_user_registration_path%></li>
+                        
+                        <%end%>
+                                        
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+		<!-- Page Content -->
+    <div class="container">
+
+        <div class="row">
+
+            <div class="col-md-3">
+                <p class="lead">Categories</p>
+                <div class="list-group">
+                <%Category.all.each do |category|%>
+                	<%=link_to category.name, category, class:"list-group-item"%>
+                <%end%>
+                    
+                </div>
+            </div>
+
+            <div class="col-md-9">
+            	<p class="notice"><%= notice %></p>
+				<p class="alert"><%= alert %></p>
+				<%= yield %>
+
+               
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+		
+
+	</div>
 
 </body>
 </html>

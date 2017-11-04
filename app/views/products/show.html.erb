@@ -1,61 +1,103 @@
-<p id="notice"><%= notice %></p>
-<h2>Product details</h2>
-<p>
-Code:<%=@product.code%><br>
-Product:<%= @product.name %><br>
-INR <%=@product.price %><br>
-Description:<%=@product.description%><br>
-Category:<%=link_to @product.category.name,category_path(@product.category_id)%><br>
-Stock:<%=@product.stock%><br>
-Availablity:<%=@product.cod_eligible%> <br>
+<div class="col-md-9">
 
-<%= form_for @cart_line_item do |f|%>
+                <div class="thumbnail">
+                    <img class="img-responsive" src="http://placehold.it/800x300" alt="">
+                    <div class="caption-full">
+                        <h4 class="pull-right">₹<%=@product.price%></h4>
+                        <h4><%=@product.name%>
+                        </h4>
+                        <p>Description:<%=@product.description%> </p>
+                        <p><strong><%=link_to @product.category.name,@product.category%></strong></p>
+                        <p>Stock:<%=@product.stock%></p>
+                        <p>Availability:<%= @product.cod_eligible ? "Yes":"No"%></p>
+                        <p>
+                            <%= form_for @cart_line_item do |f|%>
 
-	<%=f.label :quantity%>
-	<%=f.select :quantity, (1..10).to_a%>
-	<%=f.hidden_field :product_id, value:@product.id%><br>
+                                <%=f.label :quantity%>
+                                <%=f.select :quantity, (1..10).to_a%>
+                                <%=f.hidden_field :product_id, value:@product.id%>
 
-	<%=f.submit "Add to cart"%>
-<%end%>
+                                <%=f.submit "Add to cart", class:"btn btn-primary" %>
 
-<%if user_signed_in? && current_user.is_admin%>
-	<% @reviews.each do |review|%>
-	<ul>
-		<li><%=review.body%>(<%=review.rating%>)
-		<%=link_to "delete", review_path(review.id), method: :delete, data:{confirm:"Are you sure?"}%>
-		<%=link_to "edit", edit_review_path(review.id)%>
+                            <%end%>
+                        </p>
+                        <p>Want to make these reviews work? Check out</p>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+                    </div>
+                    <div class="ratings">
+                        <p class="pull-right"><%=@product.reviews.count%> reviews</p>
+                        <p>
+                            <%c=@product.reviews.pluck(:rating).sum/@product.reviews.count.to_f.round%> 
+                            <%c.times do%>
+                                <span class="glyphicon glyphicon-star"></span>
+                            <%end%>
+                            <%while c < 5%>
+                                <span class="glyphicon glyphicon-star-empty"></span>
+                                <%c+=1%>
+                            <%end%>
+                            <%=@product.reviews.pluck(:rating).sum/@product.reviews.count.to_f.round%> stars
+                        </p>
+                    </div>
+                </div>
 
-		</li>
-	</ul>
-	<%end%>
-<%else%>
-<h3>Listings of reviews</h3>
-	<%@reviews.each do |review|%>
-	<ul id="reviewList">
-		<li id="li_<%=review.id%>"><%=review.body%>(<%=review.rating%>)
+                <div class="well">
+                    <%if user_signed_in? %>
+    
+                        <%=render '/reviews/form'%>
+        
+                    <%end%>
 
-		<%if user_signed_in? && review.product_id == @product.id%>
-		
-		<%=link_to "delete",review_path(review.id), method: :delete, data:{confirm:"Are you sure?" , remote: true}%>
-		<%end%>
-		</li>
-	</ul>
-	<%end%>
-<%end%>
+                    
+                    <hr>
+                    <div id="reviewList">
+                    <%@product.reviews.each do |review|%>
+                    <div class="row" id="review_<%=review.id%>">
+                        <div class="col-md-12">
+                            <%count=0%>
+                            <%review.rating.times do%>
+                                <%count+=1%>
+                                <span class="glyphicon glyphicon-star"></span>
+                            <%end%>
+                            <%while count < 5%>
+                                <%count+=1%>
+                                <span class="glyphicon glyphicon-star-empty"></span>
+                            <%end%>
 
-<div id="errorMsg">
-	
-</div>
+                            <%=review.user.username%>
+                            <span class="pull-right">10 days ago</span>
+                            <p><%=review.body%></p>
+                            <%if user_signed_in? && review.user_id == current_user.id%>
+                            <%=link_to "delete",review_path(review.id), method: :delete, data:{confirm:"Are you sure?" , remote: true}%>
+                            <%end%>
+                        </div>
+                    </div>
+                    <hr>
+                    <%end%>
+                    </div>
+                </div>
+
+            </div>
 
 
 
-<%if user_signed_in? %>
-	
-			<%=render '/reviews/form'%>
-		
-<%end%>
 
-</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 <%if user_signed_in? && current_user.is_admin%>

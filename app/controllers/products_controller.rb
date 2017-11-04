@@ -1,34 +1,33 @@
 class ProductsController < ApplicationController
 
-before_action :authenticate_user!, except: [:index, :show]
-before_action :check_is_admin, except: [:index, :show]
+before_action :authenticate_user!, except: [:index, :show,:sort_products]
+before_action :check_is_admin, except: [:index, :show,:sort_products]
 
 def index
-	@products = Product.all
+	
+	
 	@categories = Category.all
-	if params[:ids]
-		@products = Product.where(category_id:params[:ids].split(","))
-		if @products.empty?
-			@products = Product.all
-			render json: @products.map{|p| p.attributes.merge({category_name: p.category.name})}
+	if params[:offset]
+		#binding.pry	
+		if params[:ids].blank?
+
+			@products = Product.where(price:params[:min]..params[:max]).offset(params[:offset]).limit(10)
+			#binding.pry
+			render json: {products:@products.map{|p| p.attributes.merge({category_name: p.category.name})}}
 		else
-			render json: @products.map{|p| p.attributes.merge({category_name: p.category.name})}
+			@products = Product.where(category_id:params[:ids].split(",")).where(price:params[:min]..params[:max]).offset(params[:offset]).limit(10)
+			#binding.pry
+			render json: {products:@products.map{|p| p.attributes.merge({category_name: p.category.name})}}
 		end
+		
+		
+	else
+
+		@products = Product.limit(10)
 	end
-	if params[:search]
-		@products = Product.where('name LIKE ?',"%#{params[:search]}%")
-		if @products.empty?
-			 @products = Product.all
-		else
-			@products
-		end
-	end
-	if params[:sort]
-		@products = Product.where('price <= ?',params[:sort]);
-		render json: @products
-	end
-	#binding.pry
+	
 end
+
 
 def new 
 	@product = Product.new	

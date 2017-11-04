@@ -1,14 +1,35 @@
-<p id="notice"><%= notice %></p>
+                <div id="productsList"> 
+               	 <div class="row">
+                	<%@category.products.each do |product|%>
+                    <div class="col-sm-6 col-md-6">
+                        <div class="thumbnail">
+                            <img src="http://placehold.it/320x150" alt="">
+                            <div class="caption">
+                                <h4 class="pull-right">₹<%=product.price%></h4>
+                                <h4><%=link_to product.name, product%></h4>
+                                <h6><%=product.category.name%></h6>
+                                <p><%=product.description%> <a target="_blank" href="http://www.bootsnipp.com">Bootsnipp - http://bootsnipp.com</a>.</p>
+                            </div>
+                            <div class="ratings">
+                                <p class="pull-right"><%=product.reviews.count%></p>
+                                <p>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                	<%end%>
+                </div>
+          </div>
 
-<p>
-  <strong>Name:</strong>
-  <%= @category.name %>
-  <h2>Listing Products(<%=@category.products.length%>)</h2>
-<% @category.products.each do |product|%>
-	<li><%=link_to product.name, product_path(product.id)%><%= product.price%></li>
-	<%end%>
 
-</p>
 
+
+<%if user_signed_in? && current_user.is_admin?%>
 <%= link_to 'Edit', edit_category_path(@category) %> 
 <%= link_to 'Back', categories_path %>
+<%end%>

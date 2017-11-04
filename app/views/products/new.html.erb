@@ -41,7 +41,11 @@
 	<%= f.submit %> or <%= link_to "back", products_path %>
 
 <% end %>
-
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#product_category_id').chosen();
+	});
+</script>
 <script>
 var categoryHandle = document.getElementById('product_category_id');
 var subCategoryHandle = document.getElementById('product_sub_category_id');

@@ -1,5 +1,20 @@
-<li><%= @review.body%>
-	<% if @review.user_id == current_user.id%>
-		<%= link_to "delete", review_path(@review.id),method: :delete, data:{confirm:"are you sure", remote: true}%>
-	<%end%>
-	</li>
+<div class="row" id="review_<%=@review.id%>">
+    <div class="col-md-12">
+	    <%count=0%>
+    	<%@review.rating.times do%>
+        <%count+=1%>
+            <span class="glyphicon glyphicon-star"></span>
+        <%end%>
+        <%while count < 5%>
+            <%count+=1%>
+        	<span class="glyphicon glyphicon-star-empty"></span>
+        <%end%>
+        <%=@review.user.username%>
+        <span class="pull-right">10 days ago</span>
+        <p><%=@review.body%></p>
+        <%if user_signed_in? && @review.user_id == current_user.id%>
+        	<%=link_to "delete",review_path(@review.id), method: :delete, data:{confirm:"Are you sure?" , remote: true}%>
+        <%end%>
+    </div>
+</div>
+                    

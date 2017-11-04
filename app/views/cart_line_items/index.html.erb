@@ -1,7 +1,7 @@
 <h2>Cart</h2>
 
 
-<table border="1">
+<table class="table" id="cartLineItems">
 	<thead>
 		<tr>
 			<th>Sl No</th>
@@ -22,13 +22,13 @@
 			<td><%= line_item.product.name%></td>
 			<td><%= line_item.product.price%></td>
 			
+
 			<td>
-			<%= form_for line_item do |f|%>
+			<%= form_for(line_item,remote: true) do |f|%>
 			<%= f.select :quantity,(1..10).to_a%>
 			<%=f.submit "update"%>
 			<%end%>
 			</td>
-			
 			<td>
 			<%= line_item.product.price * line_item.quantity%>
 				
@@ -53,8 +53,6 @@
 <h4>Cart Total : <%=sum.round(2)%></h4>
 
 
-
-
 <%= form_for @order do |f|%>
 	Select address:
 
@@ -65,3 +63,58 @@
 
 <%end%>
 
+<script>
+
+
+	$(document).ready(function(){
+		$('#cartLineItems').DataTable();
+	});
+
+
+	var quantityHandle = document.getElementById('cart_line_item_quantity')
+	var formLength = document.getElementsByClassName('edit_cart_line_item').length
+	var formClassName = document.getElementsByClassName('edit_cart_line_item');
+	var lineId = document.getElementsByClassName('edit_cart_line_item')[0].action.split('/')
+	var lineIdHandle = lineId[lineId.length-1]
+	function getIds(){
+		console.log("getIds");
+	//document.getElementById('edit_cart_line_item_27')[2].value
+	//var EditHandle = document.getElementById('edit_cart_line_item_'+)	
+	for (var i = 0; i < formClassName.length-1; i++) {
+		console.log(formClassName[i])
+		console.log('edit_cart_line_item_'+lineIdHandle)
+		if(formClassName[i].id == ('edit_cart_line_item_'+quantityHandle.value)	){
+			console.log("getIdspppp")
+			var formData1 = 
+		{cart_line_item:
+			{quantity: quantityHandle.value}
+		};
+		console.log(formData1)
+		}
+
+	}
+	}
+
+
+	quantityHandle.addEventListener('change',function(){
+		getIds();
+		var formData = 
+		{cart_line_item:
+			{quantity: quantityHandle.value}
+		};
+	var xhr = new XMLHttpRequest();
+	xhr.open('PATCH','http://localhost:3000/cart_line_items/'+lineIdHandle,true);
+	xhr.setRequestHeader('Content-Type',"application/json");
+	xhr.onreadystatechange = function() {
+		console.log("inside ajax")
+		if (xhr.readyState === 4 && xhr.status === 200) {
+			var response = JSON.parse(xhr.responseText);
+			//console.log(response);
+		}
+	}
+	
+	xhr.send(JSON.stringify(formData));
+
+	},false);
+	
+</script>

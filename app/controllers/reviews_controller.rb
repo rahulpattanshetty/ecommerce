@@ -46,8 +46,10 @@ def destroy
 	@review.destroy
 	#redirect_to products_path , notice:"successfully deleted"
 	respond_to do |format|
-	format.js
-end
+      format.html { redirect_to reviews_url, notice: 'Review was successfully destroyed.' }
+      format.json { head :no_content }
+      format.js
+    end
 end
 private
 	def review_params

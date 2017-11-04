@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'products/sort_products'
   resources :vendors
   get 'ajax_calls/find_sub_categories'
   get 'ajax_calls/category_products'

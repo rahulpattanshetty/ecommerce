@@ -4,10 +4,11 @@
   <% end %>
 
 			Review: 
-			<%=f.text_area :body%>
+			<%=f.text_area :body, class:"form-control"%>
 			<%=f.hidden_field :product_id, value:@product.id%><br>
 			Ratings:
-			<%=f.number_field :rating , min:1, max:5%><br>
-
-			<%=f.submit "Add review"%>
+			<%=f.number_field :rating , min:1, max:5, class:"form-control"%><br>
+			<div class="text-right">
+			<%=f.submit "Add review",class:"btn btn-success"%>
+			</div>
 <%end%>
